@@ -1,0 +1,22 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const adminController_1 = require("../controllers/adminController");
+const orderController_1 = require("../controllers/orderController");
+const paymentController_1 = require("../controllers/paymentController");
+const auth_1 = require("../middleware/auth");
+const upload_1 = require("../middleware/upload");
+const router = (0, express_1.Router)();
+// Protect all admin routes
+router.use(auth_1.authenticate, auth_1.authorizeAdmin);
+router.get('/dashboard', adminController_1.getDashboardStats);
+router.get('/users', adminController_1.getAdminUsers);
+router.put('/users/:id/status', adminController_1.updateUserStatus);
+router.get('/orders', orderController_1.getAdminOrders);
+router.put('/orders/:id/status', orderController_1.updateOrderStatus);
+router.post('/orders/:id/refund', orderController_1.refundOrder);
+router.get('/payments', paymentController_1.getAdminPayments);
+router.get('/settings', adminController_1.getStoreSettings);
+router.put('/settings', adminController_1.updateStoreSettings);
+router.post('/upload', upload_1.upload.single('image'), adminController_1.uploadImage);
+exports.default = router;
